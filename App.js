@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import {
   StyleSheet,
   View,
-  Alert,
+  Button,
 } from 'react-native'
 
 import ItemsList from './components/ItemsList'
 import CreateItem from './components/CreateItem'
+
 
 export default function App() {
 
@@ -15,39 +16,36 @@ export default function App() {
     { id: 2, name: 'John' },
   ])
 
-  const [value, setValue] = useState('')
+  const [isVisible, setVisible] = useState(false)
 
-  const addPersonToList = name => {
+  const addItem = name => {
     setPerson(people => [...people, { id: Date.now().toString(), name }])
-    setValue('')
-  }
-
-  const addPerson = () => {
-    if (value.trim()) {
-      addPersonToList(value)
-    } else {
-      Alert.alert('Input is empty!', 'Enter smth!')
-    }
   }
 
   const filterItems = id => {
     setPerson(people.filter(person => person.id !== id))
   }
 
-  const editItem = id => {
+  const editItem = (id, value) => {
     setPerson(people.map(person => {
       if (person.id == id) {
-        return ({ id: person.id, name: person.name += 'edited' })
+        return ({ id: person.id, name: value })
       } else {
         return ({ name: person.name, id: person.id })
       }
     }))
   }
 
+  const openModalCreate = () => {
+    setVisible(true)
+  }
+
   return (
     <View style={styles.container}>
 
-      <CreateItem value={value} setValue={setValue} addPerson={addPerson} />
+      <Button title='Add person!' onPress={openModalCreate} />
+
+      <CreateItem addItem={addItem} visible={isVisible} setVisible={setVisible} />
 
       <ItemsList data={people} filterItems={filterItems} editItem={editItem} />
 
@@ -57,7 +55,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 30,
+    paddingTop: 40,
     paddingHorizontal: 10,
     flex: 1,
     backgroundColor: '#eee',

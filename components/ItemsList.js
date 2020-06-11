@@ -23,6 +23,7 @@ const ItemsList = ({ data, filterItems, editItem }) => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        marginTop: 15,
         borderStyle: 'solid',
         borderColor: '#000',
         borderWidth: 1
